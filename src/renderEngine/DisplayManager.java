@@ -22,7 +22,7 @@ public class DisplayManager {
 		try {
 			Display.setDisplayMode(new DisplayMode(WIDTH,HEIGHT));
 			Display.create(new PixelFormat(), attribs);
-			Display.setTitle("The Secret Weapon [ALPHA 0.0.0.0.1]");
+			Display.setTitle("The Secret Weapon [ALPHA 0.0.0.0.2]");
 		} catch (LWJGLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
