@@ -1,5 +1,5 @@
 package models;
-//example note -NameHere
+
 import textures.ModelTexture;
 
 public class TexturedModel {
@@ -8,10 +8,8 @@ public class TexturedModel {
 	private ModelTexture texture;
 	
 	public TexturedModel(RawModel model, ModelTexture texture){
-		
 		this.rawModel = model;
 		this.texture = texture;
-		
 	}
 
 	public RawModel getRawModel() {
@@ -21,5 +19,5 @@ public class TexturedModel {
 	public ModelTexture getTexture() {
 		return texture;
 	}
-	
+
 }

@@ -5,6 +5,10 @@ My first java game, let's hope this ends well
 
 _________________________
 
+ Alpha 0.0.0.0.5
++ 3D Cube!
++ Test textured cube
+
  Alpha 0.0.0.0.4
 + Made rendering MUCH better
 + Mostly just rendering stuff

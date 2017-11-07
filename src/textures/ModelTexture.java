@@ -1,25 +1,15 @@
 package textures;
-//finally
+
 public class ModelTexture {
-	
-	
-	//define varibles -HungryBoy02
 	
 	private int textureID;
 	
-	
-	//Model Textures -HungryBoy02
-	
-	public ModelTexture(int id){
-		
-		this.textureID = id;
-		
+	public ModelTexture(int texture){
+		this.textureID = texture;
 	}
 	
 	public int getID(){
-		
-		return this.textureID;
-		
+		return textureID;
 	}
-	
+
 }
