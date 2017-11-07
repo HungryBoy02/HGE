@@ -1,5 +1,5 @@
 package shaders;
-
+//these annoying messages will be gone by the next commision
 public class StaticShader extends ShaderProgram{
 	
 	private static final String VERTEX_FILE = "src/shaders/vertexShader.txt";

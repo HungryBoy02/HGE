@@ -14,7 +14,7 @@ public class DisplayManager {
 	private static final int FPS_CAP = 120;
 	
 	public static void createDisplay(){
-		//Attribs Setup -HungryBoy02
+		//Attr Setup -HungryBoy02
 		ContextAttribs attribs = new ContextAttribs(3,2);
 		attribs.withForwardCompatible(true);
 		attribs.withProfileCore(true);

@@ -3,7 +3,7 @@ My first java game, let's hope this ends well
 
 (For all team members, when you leave a note, please leave a -<YourUsernameHere> at the end.)
 
-________________________
+_________________________
 
  Alpha 0.0.0.0.3
 + Texture test with a test texture

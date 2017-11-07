@@ -1,4 +1,5 @@
 #version 400 core
+//Idk if this works for gsgl
 in vec2 pass_textureCoords;
 
 out vec4 out_Color;
