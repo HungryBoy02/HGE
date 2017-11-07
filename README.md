@@ -5,6 +5,10 @@ My first java game, let's hope this ends well
 
 _________________________
 
+ Alpha 0.0.0.0.4
++ Made rendering MUCH better
++ Mostly just rendering stuff
+
  Alpha 0.0.0.0.3
 + Texture test with a test texture
 + Test texture (res/image.png)
