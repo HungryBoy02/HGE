@@ -8,6 +8,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
+import renderEngine.MasterRenderer;
 import renderEngine.OBJLoader;
 import renderEngine.Renderer;
 import shaders.StaticShader;
@@ -22,8 +23,6 @@ public class MainGameLoop {
 
 		DisplayManager.createDisplay();
 		Loader loader = new Loader();
-		StaticShader shader = new StaticShader();
-		Renderer renderer = new Renderer(shader);
 		
 		
 		
@@ -41,19 +40,18 @@ public class MainGameLoop {
 		
 		Camera camera = new Camera();
 		
+		MasterRenderer renderer = new MasterRenderer();
 		while(!Display.isCloseRequested()){
 			entity.increaseRotation(0, 1, 0.05f);
 			camera.move();
-			renderer.prepare();
-			shader.start();
-			shader.loadLight(light);
-			shader.loadViewMatrix(camera);
-			renderer.render(entity,shader);
-			shader.stop();
+			
+			renderer.processEntity(entity);
+			
+			renderer.render(light, camera);
 			DisplayManager.updateDisplay();
 		}
 
-		shader.cleanUp();
+		renderer.cleanUp();
 		loader.cleanUp();
 		DisplayManager.closeDisplay();
 

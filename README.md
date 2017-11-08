@@ -4,6 +4,10 @@ My first java game, let's hope this ends well
 (For all team members, when you leave a note, please leave a -YourUsernameHere at the end.)
 
 _________________________
+ 
+ Alpha 0.0.0.0.9
++ W A S And D All work now.
++ The renderer is a TON more efficient now! (More fps, less lag)
 
  Alpha 0.0.0.0.8
 + Specular Shading :D

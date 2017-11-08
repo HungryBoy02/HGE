@@ -21,7 +21,7 @@ public class DisplayManager {
 		try {
 			Display.setDisplayMode(new DisplayMode(WIDTH,HEIGHT));
 			Display.create(new PixelFormat(), attribs);
-			Display.setTitle("Alpha 0.0.0.0.8");
+			Display.setTitle("Alpha 0.0.0.0.9");
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}
