@@ -4,6 +4,9 @@ My first java game, let's hope this ends well
 (For all team members, when you leave a note, please leave a -YourUsernameHere at the end.)
 
 _________________________
+
+ Alpha 0.0.0.1.0
++ Added Terrain
  
  Alpha 0.0.0.0.9
 + W A S And D All work now.
