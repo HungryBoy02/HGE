@@ -5,6 +5,9 @@ My first java game, let's hope this ends well
 
 _________________________
 
+ Alpha 0.0.0.0.8
++ Specular Shading :D
+
  Alpha 0.0.0.0.7
 + Per Pixel Lighting! yay!
 
