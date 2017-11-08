@@ -14,6 +14,7 @@ import shaders.StaticShader;
 import textures.ModelTexture;
 import entities.Camera;
 import entities.Entity;
+import entities.Light;
 
 public class MainGameLoop {
 
@@ -33,6 +34,8 @@ public class MainGameLoop {
 		
 		Entity entity = new Entity(staticModel, new Vector3f(0,0,-5),0,0,0,1);
 		
+		Light light = new Light(new Vector3f(0,0,0), new Vector3f(1,1,1));
+		
 		Camera camera = new Camera();
 		
 		while(!Display.isCloseRequested()){
@@ -40,6 +43,7 @@ public class MainGameLoop {
 			camera.move();
 			renderer.prepare();
 			shader.start();
+			shader.loadLight(light);
 			shader.loadViewMatrix(camera);
 			renderer.render(entity,shader);
 			shader.stop();

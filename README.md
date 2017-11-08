@@ -5,6 +5,9 @@ My first java game, let's hope this ends well
 
 _________________________
 
+ Alpha 0.0.0.0.7
++ Per Pixel Lighting! yay!
+
  Alpha 0.0.0.0.6
 + 3D Wine Glass with a derpy texture!
 
