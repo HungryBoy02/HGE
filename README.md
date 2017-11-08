@@ -5,6 +5,9 @@ My first java game, let's hope this ends well
 
 _________________________
 
+ Alpha 0.0.0.1.1
++ Added Randomly Generated Trees And Grass.
+
  Alpha 0.0.0.1.0
 + Added Terrain
  
