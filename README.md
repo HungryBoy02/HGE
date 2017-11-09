@@ -5,6 +5,9 @@ My first java game, let's hope this ends well
 
 _________________________
 
+ Alpha 0.0.0.1.3
++ Added Paths and suff.
+
  Alpha 0.0.0.1.2
 + Re-Added texture tiling (oops)
 + Added fog

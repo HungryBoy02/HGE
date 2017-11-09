@@ -18,6 +18,8 @@ import renderEngine.EntityRenderer;
 import shaders.StaticShader;
 import terrains.Terrain;
 import textures.ModelTexture;
+import textures.TerrainTexture;
+import textures.TerrainTexturePack;
 import entities.Camera;
 import entities.Entity;
 import entities.Light;
@@ -28,6 +30,19 @@ public class MainGameLoop {
 
 		DisplayManager.createDisplay();
 		Loader loader = new Loader();
+		
+		//*********TERRAIN TEXTURE STUFF**********
+		
+		TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("grass"));
+		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("dirt"));
+		TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("grass_flowers"));
+		TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("path"));
+		
+		TerrainTexturePack texturePack = new TerrainTexturePack(backgroundTexture, rTexture, gTexture, bTexture);
+		
+		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("blendMap"));
+		
+		//****************************************
 		
 		
 		TexturedModel treeModel = new TexturedModel(OBJLoader.loadObjModel("Tree", loader),
@@ -65,19 +80,24 @@ public class MainGameLoop {
 		
 		List<Entity> entities = new ArrayList<Entity>();
 		Random random = new Random();
-		for(int i = 0; i < 150; i++){
-			entities.add(new Entity(treeModel, new Vector3f(random.nextFloat() * 800 - 400, 0, random.nextFloat() * -600), 0, 0, 0, 10));
-			entities.add(new Entity(grassModel, new Vector3f(random.nextFloat() * 800 - 400, 0, random.nextFloat() * -600), 0, 0, 0, 2));
-			entities.add(new Entity(fernModel, new Vector3f(random.nextFloat() * 800 - 400, 0, random.nextFloat() * -600), 0, 0, 0, 1.5f));
-			entities.add(new Entity(altTreeModel, new Vector3f(random.nextFloat() * 800 - 400, 0, random.nextFloat() * -600), 0, 0, 0, 3));
+		for(int i = 0; i < 400; i++){
+			if (i % 7 == 0) {
+				entities.add(new Entity(grassModel, new Vector3f(random.nextFloat() * 400 - 200, 0, random.nextFloat() * -400), 0, 0, 0, 2));
+			}
+			if (i % 3 == 0) {
+				entities.add(new Entity(treeModel, new Vector3f(random.nextFloat() * 400 - 200, 0, random.nextFloat() * -400), 0, random.nextFloat() * 360, 0, 1.5f));
+				entities.add(new Entity(fernModel, new Vector3f(random.nextFloat() * 400 - 200, 0, random.nextFloat() * -400), 0, random.nextFloat() * 360, 0, 1.5f));
+				entities.add(new Entity(altTreeModel, new Vector3f(random.nextFloat() * 400 - 200, 0, random.nextFloat() * -400), 0, random.nextFloat() * 360, 0, 1.5f));
+			}
+
 		}
 		
 
 		Entity entity = new Entity(WineGlassModel, new Vector3f(0, 0, -25), 0, 0, 0, 20);
 		Light light = new Light(new Vector3f(3000, 2000, 2000), new Vector3f(1, 1, 1));
 
-		Terrain terrain = new Terrain(0, -1, loader, new ModelTexture(loader.loadTexture("grass")));
-		Terrain terrain2 = new Terrain(-1, -1, loader, new ModelTexture(loader.loadTexture("grass")));
+		Terrain terrain = new Terrain(0, -1, loader, texturePack, blendMap);
+		Terrain terrain2 = new Terrain(1, -1, loader, texturePack, blendMap);
 
 		Camera camera = new Camera();
 
@@ -86,7 +106,6 @@ public class MainGameLoop {
 			camera.move();
 
 			renderer.processTerrain(terrain);
-			renderer.processTerrain(terrain2);
 			renderer.processEntity(entity);
 			for(Entity ent:entities){
 				renderer.processEntity(ent);
