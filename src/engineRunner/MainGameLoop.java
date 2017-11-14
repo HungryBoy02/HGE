@@ -23,6 +23,7 @@ import textures.TerrainTexturePack;
 import entities.Camera;
 import entities.Entity;
 import entities.Light;
+import entities.Player;
 
 public class MainGameLoop {
 
@@ -77,6 +78,9 @@ public class MainGameLoop {
 		WineGlassTexture.setShineDamper(10);
 		WineGlassTexture.setReflectivity(1);
 		
+		RawModel bunnyModel = OBJLoader.loadObjModel("bunny", loader);
+		TexturedModel stanfordBunny = new TexturedModel(bunnyModel, new ModelTexture(loader.loadTexture("white")));
+		
 		
 		List<Entity> entities = new ArrayList<Entity>();
 		Random random = new Random();
@@ -85,7 +89,7 @@ public class MainGameLoop {
 				entities.add(new Entity(grassModel, new Vector3f(random.nextFloat() * 400 - 200, 0, random.nextFloat() * -400), 0, 0, 0, 2));
 			}
 			if (i % 3 == 0) {
-				entities.add(new Entity(treeModel, new Vector3f(random.nextFloat() * 400 - 200, 0, random.nextFloat() * -400), 0, random.nextFloat() * 360, 0, 1.5f));
+				entities.add(new Entity(treeModel, new Vector3f(random.nextFloat() * 400 - 200, 0, random.nextFloat() * -400), 0, random.nextFloat() * 360, 0, 5f));
 				entities.add(new Entity(fernModel, new Vector3f(random.nextFloat() * 400 - 200, 0, random.nextFloat() * -400), 0, random.nextFloat() * 360, 0, 1.5f));
 				entities.add(new Entity(altTreeModel, new Vector3f(random.nextFloat() * 400 - 200, 0, random.nextFloat() * -400), 0, random.nextFloat() * 360, 0, 1.5f));
 			}
@@ -97,14 +101,17 @@ public class MainGameLoop {
 		Light light = new Light(new Vector3f(3000, 2000, 2000), new Vector3f(1, 1, 1));
 
 		Terrain terrain = new Terrain(0, -1, loader, texturePack, blendMap);
-		Terrain terrain2 = new Terrain(1, -1, loader, texturePack, blendMap);
 
 		Camera camera = new Camera();
 
 		MasterRenderer renderer = new MasterRenderer();
+		
+		Player player = new Player(stanfordBunny, new Vector3f(100,0,-100), 0, 0, 0, 1);
+		
 		while (!Display.isCloseRequested()) {
 			camera.move();
-
+			player.move();
+			renderer.processEntity(player);
 			renderer.processTerrain(terrain);
 			renderer.processEntity(entity);
 			for(Entity ent:entities){

@@ -5,6 +5,9 @@ My first java game, let's hope this ends well
 
 _________________________
 
+ Alpha 0.0.0.1.4
++ Added Player Movement (currently a test bunny)
+
  Alpha 0.0.0.1.3
 + Added Paths and suff.
 
