@@ -1,5 +1,5 @@
 package renderEngine;
-
+//Display manager
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
 import org.lwjgl.opengl.ContextAttribs;
