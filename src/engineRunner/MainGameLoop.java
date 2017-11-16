@@ -60,16 +60,20 @@ public class MainGameLoop {
 		
 		
 		//Fern Model -HungryBoy02
-		TexturedModel fernModel = new TexturedModel(OBJLoader.loadObjModel("fern", loader),
-				new ModelTexture(loader.loadTexture("fern")));
+		
+		ModelTexture fernTextureAtlas = new ModelTexture(loader.loadTexture("fern"));
+		fernTextureAtlas.setNumberOfRows(2);
+		
+		TexturedModel fernModel = new TexturedModel(OBJLoader.loadObjModel("fern", loader), fernTextureAtlas);
+		
 		fernModel.getTexture().setHasTransparency(true);
+		fernModel.getTexture().setReflectivity(1);
+		fernModel.getTexture().setShineDamper(10);
 		
 		//Alternate Tree Model -HungryBoy02
 		TexturedModel altTreeModel = new TexturedModel(OBJLoader.loadObjModel("tree_alt_2", loader),
 				new ModelTexture(loader.loadTexture("tree_alt_2")));
 		ModelTexture altTreeTexture = altTreeModel.getTexture();
-		altTreeTexture.setShineDamper(10);
-		altTreeTexture.setReflectivity(1);
 		
 		//WineGlass Model
 		TexturedModel WineGlassModel = new TexturedModel(OBJLoader.loadObjModel("WineGlass", loader),
@@ -81,38 +85,78 @@ public class MainGameLoop {
 		RawModel bunnyModel = OBJLoader.loadObjModel("bunny", loader);
 		TexturedModel stanfordBunny = new TexturedModel(bunnyModel, new ModelTexture(loader.loadTexture("white")));
 		
+		//Redone Wine Glass Model
+		
+			RawModel reWineGlassModel = OBJLoader.loadObjModel("RedoneWineGlass", loader);
+			TexturedModel ReWineGlass = new TexturedModel(reWineGlassModel, new ModelTexture(loader.loadTexture("RedoneWineGlass")));
+			ReWineGlass.getTexture().setShineDamper(10);
+			ReWineGlass.getTexture().setReflectivity(1);
+				
+				//new tree
+				
+			RawModel NewTree = OBJLoader.loadObjModel("NewTree", loader);
+			TexturedModel nTree = new TexturedModel(NewTree, new ModelTexture(loader.loadTexture("NewTree")));
+			nTree.getTexture().setHasTransparency(true);
 		
 		List<Entity> entities = new ArrayList<Entity>();
 		Random random = new Random();
+		
+		
+
+		Entity entity = new Entity(ReWineGlass, new Vector3f(0, 0, -25), 0, 0, 0, 20);
+		Light light = new Light(new Vector3f(3000, 2000, 2000), new Vector3f(1, 1, 1));
+
+		Terrain terrain = new Terrain(0, -1, loader, texturePack, blendMap, "heightmap");
+		Terrain terrain2 = new Terrain(-1, -1, loader, texturePack, blendMap, "heightmap");
+		
 		for(int i = 0; i < 400; i++){
-			if (i % 7 == 0) {
-				entities.add(new Entity(grassModel, new Vector3f(random.nextFloat() * 400 - 200, 0, random.nextFloat() * -400), 0, 0, 0, 2));
+			if (i % 20 == 0) {
+				float x = random.nextFloat() * 800 - 400;
+				float z = random.nextFloat() * -600;
+				float y = terrain.getHeightOfTerrain(x, z);
+				if (y==-128) {
+					y = terrain2.getHeightOfTerrain(x, z);
+				}
+				entities.add(new Entity(grassModel, new Vector3f(x,y,z), 0, 0, 0, 2));
 			}
-			if (i % 3 == 0) {
-				entities.add(new Entity(treeModel, new Vector3f(random.nextFloat() * 400 - 200, 0, random.nextFloat() * -400), 0, random.nextFloat() * 360, 0, 5f));
-				entities.add(new Entity(fernModel, new Vector3f(random.nextFloat() * 400 - 200, 0, random.nextFloat() * -400), 0, random.nextFloat() * 360, 0, 1.5f));
-				entities.add(new Entity(altTreeModel, new Vector3f(random.nextFloat() * 400 - 200, 0, random.nextFloat() * -400), 0, random.nextFloat() * 360, 0, 1.5f));
+			if (i % 5 == 0) {
+				float x = random.nextFloat() * 800 - 400;
+				float z = random.nextFloat() * -600;
+				float y = terrain.getHeightOfTerrain(x, z);
+				if (y==-128) {
+					y = terrain2.getHeightOfTerrain(x, z);
+				}
+				entities.add(new Entity(nTree, new Vector3f(x,y - 5,z), 0, random.nextFloat() * 360, 0, 10f));
+				x = random.nextFloat() * 800 - 400;
+				z = random.nextFloat() * -600;
+				y = terrain.getHeightOfTerrain(x, z);
+				if (y==-128) {
+					y = terrain2.getHeightOfTerrain(x, z);
+				}
+				entities.add(new Entity(fernModel, random.nextInt(4), new Vector3f(x,y,z), 0, random.nextFloat() * 360, 0, 0.9f));
+				x = random.nextFloat() * 800 - 400;
+				z = random.nextFloat() * -600;
+				y = terrain.getHeightOfTerrain(x, z);
+				if (y==-128) {
+					y = terrain2.getHeightOfTerrain(x, z);
+				}
+				entities.add(new Entity(altTreeModel, new Vector3f(x,y - 5,z), 0, random.nextFloat() * 360, 0, 3f));
 			}
 
 		}
 		
-
-		Entity entity = new Entity(WineGlassModel, new Vector3f(0, 0, -25), 0, 0, 0, 20);
-		Light light = new Light(new Vector3f(3000, 2000, 2000), new Vector3f(1, 1, 1));
-
-		Terrain terrain = new Terrain(0, -1, loader, texturePack, blendMap);
-
-		Camera camera = new Camera();
-
 		MasterRenderer renderer = new MasterRenderer();
 		
-		Player player = new Player(stanfordBunny, new Vector3f(100,0,-100), 0, 0, 0, 1);
+		Player player = new Player(stanfordBunny, new Vector3f(100,0,-100), 0, 0, 0, 0.3f);
+		
+		Camera camera = new Camera(player);
 		
 		while (!Display.isCloseRequested()) {
+			player.move(terrain);
 			camera.move();
-			player.move();
 			renderer.processEntity(player);
 			renderer.processTerrain(terrain);
+			renderer.processTerrain(terrain2);
 			renderer.processEntity(entity);
 			for(Entity ent:entities){
 				renderer.processEntity(ent);

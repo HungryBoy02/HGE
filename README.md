@@ -5,6 +5,9 @@ My first java game, let's hope this ends well
 
 _______________________
 
+ Alpha 0.0.0.1.5
++ Better looking terrain... don't terp off any edges though :P
+
  Alpha 0.0.0.1.4
 + Added Player Movement (currently a test bunny)
 

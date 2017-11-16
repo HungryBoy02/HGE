@@ -51,7 +51,9 @@ public class EntityRenderer {
 		GL20.glEnableVertexAttribArray(2);
 		//--------------------------------
 		ModelTexture texture = model.getTexture();
-		//Test for transparency -HungryBot02
+		//Tex atlas stuff -HungryBoy02
+		shader.loadNumberOfRows(texture.getNumberOfRows());
+		//Test for transparency -HungryBoy02
 		if(texture.isHasTransparency()){
 			MasterRenderer.disableCulling();
 		}
@@ -73,6 +75,7 @@ public class EntityRenderer {
 		Matrix4f transformationMatrix = Maths.createTransformationMatrix(entity.getPosition(),
 				entity.getRotX(), entity.getRotY(), entity.getRotZ(), entity.getScale());
 		shader.loadTransformationMatrix(transformationMatrix);
+		shader.loadOffset(entity.getTextureXOffset(), entity.getTextureYOffset());
 	}
 	
 	
