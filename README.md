@@ -5,6 +5,9 @@ My first java game, let's hope this ends well
 
 _______________________
 
+ Alpha 0.0.0.1.6
++ Was supposed to add support for multiple lights but instead removed light all togather
+
  Alpha 0.0.0.1.5
 + Better looking terrain... don't terp off any edges though :P
 
