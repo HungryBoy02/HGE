@@ -5,6 +5,10 @@ My first java game, let's hope this ends well
 
 _______________________
 
+ Alpha 0.0.0.1.7
++ Reverted back to 0.0.0.1.5 shading because I coulden't fix it.
++ You can't just flip the camera upside down anymore.
+
  Alpha 0.0.0.1.6
 + Was supposed to add support for multiple lights but instead removed light all togather
 

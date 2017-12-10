@@ -13,6 +13,7 @@ public class DisplayManager {
 	private static final int WIDTH = 1280;
 	private static final int HEIGHT = 720;
 	private static final int FPS_CAP = 120;
+	public static String Title = "Alpha 0.0.0.1.7";
 	
 	private static long lastFrameTime;
 	private static float delta;
@@ -25,7 +26,7 @@ public class DisplayManager {
 		try {
 			Display.setDisplayMode(new DisplayMode(WIDTH,HEIGHT));
 			Display.create(new PixelFormat(), attribs);
-			Display.setTitle("Alpha 0.0.0.1.6");
+			Display.setTitle(Title);
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}
