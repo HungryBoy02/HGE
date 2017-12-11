@@ -138,39 +138,27 @@ public class MainGameLoop {
         entities.add(new Entity(StreetLamp, new Vector3f(185, terrain.getHeightOfTerrain(185, -293) - 0.5f, -293), 0, 0, 0, 5));
         entities.add(new Entity(StreetLamp, new Vector3f(370, terrain.getHeightOfTerrain(370, -300) - 0.5f, -300), 0, 0, 0, 5));
         entities.add(new Entity(StreetLamp, new Vector3f(293, terrain.getHeightOfTerrain(293, -305) - 0.5f, -305), 0, 0, 0, 5));
-        
-		for(int i = 0; i < 400; i++){
+        Random random1 = new Random(676452);
+		for(int i = 0; i < 800; i++){
 			if (i % 20 == 0) {
-				float x = random.nextFloat() * 800 - 400;
-				float z = random.nextFloat() * -600;
+				float x = random1.nextFloat() * 800;
+                float z = random1.nextFloat() * -600;
 				float y = terrain.getHeightOfTerrain(x, z);
-				if (y==-128) {
-					y = terrain2.getHeightOfTerrain(x, z);
-				}
 				entities.add(new Entity(grassModel, new Vector3f(x,y,z), 0, 0, 0, 2));
 			}
 			if (i % 5 == 0) {
-				float x = random.nextFloat() * 800 - 400;
-				float z = random.nextFloat() * -600;
+                float x = random1.nextFloat() * 800;
+                float z = random1.nextFloat() * -600;
 				float y = terrain.getHeightOfTerrain(x, z);
-				if (y==-128) {
-					y = terrain2.getHeightOfTerrain(x, z);
-				}
-				entities.add(new Entity(nTree, new Vector3f(x,y - 5,z), 0, random.nextFloat() * 360, 0, 10f));
-				x = random.nextFloat() * 800 - 400;
-				z = random.nextFloat() * -600;
+				entities.add(new Entity(nTree, new Vector3f(x,y - 5,z), 0, random1.nextFloat() * 360, 0, 10f));
+				x = random1.nextFloat() * 800;
+                z = random1.nextFloat() * -600;
 				y = terrain.getHeightOfTerrain(x, z);
-				if (y==-128) {
-					y = terrain2.getHeightOfTerrain(x, z);
-				}
-				entities.add(new Entity(fernModel, random.nextInt(4), new Vector3f(x,y,z), 0, random.nextFloat() * 360, 0, 0.9f));
-				x = random.nextFloat() * 800 - 400;
-				z = random.nextFloat() * -600;
+				entities.add(new Entity(fernModel, random1.nextInt(4), new Vector3f(x,y,z), 0, random1.nextFloat() * 360, 0, 0.9f));
+				x = random1.nextFloat() * 800;
+                z = random1.nextFloat() * -600;
 				y = terrain.getHeightOfTerrain(x, z);
-				if (y==-128) {
-					y = terrain2.getHeightOfTerrain(x, z);
-				}
-				entities.add(new Entity(altTreeModel, new Vector3f(x,y - 5,z), 0, random.nextFloat() * 360, 0, 3f));
+				entities.add(new Entity(altTreeModel, new Vector3f(x,y - 5,z), 0, random1.nextFloat() * 360, 0, 3f));
 			}
 
 		}

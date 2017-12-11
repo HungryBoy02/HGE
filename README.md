@@ -5,6 +5,9 @@ My first java game, let's hope this ends well
 
 _______________________
 
+ Alpha 0.0.0.2.1
++ Started progress on skyboxing
+
  Alpha 0.0.0.2.0
 + Added point light support. 
 + 3 lamps, can you find them? (if you care?)
