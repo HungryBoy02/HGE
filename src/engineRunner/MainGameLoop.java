@@ -121,18 +121,24 @@ public class MainGameLoop {
 		
 
 		Entity entity = new Entity(ReWineGlass, new Vector3f(0, 0, -25), 0, 0, 0, 20);
+
 		
-		Entity StreetLampO = new Entity(StreetLamp, new Vector3f(0, 0, -50), 0, 0, 0, 5);
-
-		Light light = new Light(new Vector3f(0, 10000, -7000), new Vector3f(1, 1, 1));
-        List<Light> lights = new ArrayList<Light>();
-        lights.add(light);
-        lights.add(new Light(new Vector3f(-200,100,-200), new Vector3f(5,0,0)));
-        lights.add(new Light(new Vector3f(200,100,200), new Vector3f(0,0,5)));
-
 		Terrain terrain = new Terrain(0, -1, loader, texturePack, blendMap, "heightmap");
 		Terrain terrain2 = new Terrain(-1, -1, loader, texturePack, blendMap, "heightmap");
 		
+		//Lights
+        List<Light> lights = new ArrayList<Light>();
+        lights.add(new Light(new Vector3f(0, 1000, -7000), new Vector3f(0.4f,0.4f,0.4f)));
+        lights.add(new Light(new Vector3f(185, 9, -293), new Vector3f(2,0,0), new Vector3f(1, 0.01f, 0.002f)));
+        lights.add(new Light(new Vector3f(370, 16, -300), new Vector3f(0,2,2), new Vector3f(1, 0.01f, 0.002f)));
+        lights.add(new Light(new Vector3f(293, 6, -305), new Vector3f(2,2,0), new Vector3f(1, 0.01f, 0.002f)));
+        
+        //Lamps
+        
+        entities.add(new Entity(StreetLamp, new Vector3f(185, terrain.getHeightOfTerrain(185, -293) - 0.5f, -293), 0, 0, 0, 5));
+        entities.add(new Entity(StreetLamp, new Vector3f(370, terrain.getHeightOfTerrain(370, -300) - 0.5f, -300), 0, 0, 0, 5));
+        entities.add(new Entity(StreetLamp, new Vector3f(293, terrain.getHeightOfTerrain(293, -305) - 0.5f, -305), 0, 0, 0, 5));
+        
 		for(int i = 0; i < 400; i++){
 			if (i % 20 == 0) {
 				float x = random.nextFloat() * 800 - 400;
@@ -182,7 +188,6 @@ public class MainGameLoop {
 			renderer.processTerrain(terrain);
 			renderer.processTerrain(terrain2);
 			renderer.processEntity(entity);
-			renderer.processEntity(StreetLampO);
 			for(Entity ent:entities){
 				renderer.processEntity(ent);
 			}
