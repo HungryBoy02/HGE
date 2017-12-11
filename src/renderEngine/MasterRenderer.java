@@ -15,6 +15,7 @@ import entities.Light;
 import models.TexturedModel;
 import shaders.StaticShader;
 import shaders.TerrainShader;
+import skybox.SkyboxRenderer;
 import terrains.Terrain;
 
 public class MasterRenderer {
@@ -36,19 +37,16 @@ public class MasterRenderer {
 	private Map<TexturedModel,List<Entity>> entities = new HashMap<TexturedModel,List<Entity>>();
 	private List<Terrain> terrains = new ArrayList<Terrain>();
 	
-	public static void enableCulling(){
-		GL11.glEnable(GL11.GL_CULL_FACE);
-		GL11.glCullFace(GL11.GL_BACK);
-	}
-	public static void disableCulling(){
-		GL11.glDisable(GL11.GL_CULL_FACE);
-	}
+	private SkyboxRenderer skyboxRenderer;
 	
-	public MasterRenderer(){
+
+	
+	public MasterRenderer(Loader loader){
 		enableCulling();
 		createProjectionMatrix();
 		renderer = new EntityRenderer(shader, projectionMatrix);
 		terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
+		skyboxRenderer = new SkyboxRenderer(loader, projectionMatrix);
 	}
 	
 	public void render(List<Light> lights, Camera camera){
@@ -65,8 +63,17 @@ public class MasterRenderer {
 		terrainShader.loadViewMatrix(camera);
 		terrainRenderer.render(terrains);
 		terrainShader.stop();
+		skyboxRenderer.render(camera);
 		terrains.clear();
 		entities.clear();
+	}
+	
+	public static void enableCulling(){
+		GL11.glEnable(GL11.GL_CULL_FACE);
+		GL11.glCullFace(GL11.GL_BACK);
+	}
+	public static void disableCulling(){
+		GL11.glDisable(GL11.GL_CULL_FACE);
 	}
 	
 	public void processTerrain(Terrain terrain){

@@ -5,6 +5,9 @@ My first java game, let's hope this ends well
 
 _______________________
 
+ Alpha 0.0.0.2.2
++ Added a rotating skybox!
+
  Alpha 0.0.0.2.1
 + Started progress on skyboxing
 

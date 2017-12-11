@@ -163,7 +163,7 @@ public class MainGameLoop {
 
 		}
 		
-		MasterRenderer renderer = new MasterRenderer();
+		MasterRenderer renderer = new MasterRenderer(loader);
 		
 		Player player = new Player(stanfordBunny, new Vector3f(100,0,-100), 0, 0, 0, 0.3f);
 		
