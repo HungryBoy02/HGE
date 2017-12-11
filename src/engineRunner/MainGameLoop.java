@@ -2,6 +2,8 @@ package engineRunner;
 //hello
 import models.RawModel;
 import models.TexturedModel;
+import objConverter.ModelData;
+import objConverter.OBJFileLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,10 +89,14 @@ public class MainGameLoop {
 		
 		//Redone Wine Glass Model
 		
-			RawModel reWineGlassModel = OBJLoader.loadObjModel("RedoneWineGlass", loader);
-			TexturedModel ReWineGlass = new TexturedModel(reWineGlassModel, new ModelTexture(loader.loadTexture("RedoneWineGlass")));
-			ReWineGlass.getTexture().setShineDamper(10);
-			ReWineGlass.getTexture().setReflectivity(1);
+		ModelData reWineGlassModelData = OBJFileLoader.loadOBJ("RedoneWineGlass");
+		RawModel reWineGlassModel = loader.loadToVAO(reWineGlassModelData.getVertices(),
+				reWineGlassModelData.getTextureCoords(), reWineGlassModelData.getNormals(),
+				reWineGlassModelData.getIndices());
+		TexturedModel ReWineGlass = new TexturedModel(reWineGlassModel,
+				new ModelTexture(loader.loadTexture("RedoneWineGlass")));
+		ReWineGlass.getTexture().setShineDamper(10);
+		ReWineGlass.getTexture().setReflectivity(1);
 				
 				//new tree
 				
@@ -104,7 +110,12 @@ public class MainGameLoop {
 		
 
 		Entity entity = new Entity(ReWineGlass, new Vector3f(0, 0, -25), 0, 0, 0, 20);
-		Light light = new Light(new Vector3f(3000, 2000, 2000), new Vector3f(1, 1, 1));
+
+		Light light = new Light(new Vector3f(0, 10000, -7000), new Vector3f(1, 1, 1));
+        List<Light> lights = new ArrayList<Light>();
+        lights.add(light);
+        lights.add(new Light(new Vector3f(-200,100,-200), new Vector3f(5,0,0)));
+        lights.add(new Light(new Vector3f(200,100,200), new Vector3f(0,0,5)));
 
 		Terrain terrain = new Terrain(0, -1, loader, texturePack, blendMap, "heightmap");
 		Terrain terrain2 = new Terrain(-1, -1, loader, texturePack, blendMap, "heightmap");
@@ -161,7 +172,7 @@ public class MainGameLoop {
 			for(Entity ent:entities){
 				renderer.processEntity(ent);
 			}
-			renderer.render(light, camera);
+			renderer.render(lights, camera);
 			DisplayManager.updateDisplay();
 		}
 

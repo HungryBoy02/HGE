@@ -5,6 +5,9 @@ My first java game, let's hope this ends well
 
 _______________________
 
+ Alpha 0.0.0.1.8
++ Re-added support for multiple lights, correctly this time! (RAINBOW TEST LIGHTS!!)
+
  Alpha 0.0.0.1.7
 + Reverted back to 0.0.0.1.5 shading because I coulden't fix it.
 + You can't just flip the camera upside down anymore.
