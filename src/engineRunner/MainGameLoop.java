@@ -89,14 +89,25 @@ public class MainGameLoop {
 		
 		//Redone Wine Glass Model
 		
-		ModelData reWineGlassModelData = OBJFileLoader.loadOBJ("RedoneWineGlass");
-		RawModel reWineGlassModel = loader.loadToVAO(reWineGlassModelData.getVertices(),
-				reWineGlassModelData.getTextureCoords(), reWineGlassModelData.getNormals(),
-				reWineGlassModelData.getIndices());
-		TexturedModel ReWineGlass = new TexturedModel(reWineGlassModel,
-				new ModelTexture(loader.loadTexture("RedoneWineGlass")));
-		ReWineGlass.getTexture().setShineDamper(10);
-		ReWineGlass.getTexture().setReflectivity(1);
+				ModelData reWineGlassModelData = OBJFileLoader.loadOBJ("RedoneWineGlass");
+				RawModel reWineGlassModel = loader.loadToVAO(reWineGlassModelData.getVertices(),
+						reWineGlassModelData.getTextureCoords(), reWineGlassModelData.getNormals(),
+						reWineGlassModelData.getIndices());
+				TexturedModel ReWineGlass = new TexturedModel(reWineGlassModel,
+						new ModelTexture(loader.loadTexture("RedoneWineGlass")));
+				ReWineGlass.getTexture().setShineDamper(10);
+				ReWineGlass.getTexture().setReflectivity(1);
+				
+				//Street Lamp Model
+				
+				ModelData StreetLampModelData = OBJFileLoader.loadOBJ("StreetLamp");
+				RawModel StreetLampModel = loader.loadToVAO(StreetLampModelData.getVertices(),
+						StreetLampModelData.getTextureCoords(), StreetLampModelData.getNormals(),
+						StreetLampModelData.getIndices());
+				TexturedModel StreetLamp = new TexturedModel(StreetLampModel,
+						new ModelTexture(loader.loadTexture("StreetLamp")));
+				StreetLamp.getTexture().setShineDamper(10);
+				StreetLamp.getTexture().setReflectivity(2);
 				
 				//new tree
 				
@@ -110,6 +121,8 @@ public class MainGameLoop {
 		
 
 		Entity entity = new Entity(ReWineGlass, new Vector3f(0, 0, -25), 0, 0, 0, 20);
+		
+		Entity StreetLampO = new Entity(StreetLamp, new Vector3f(0, 0, -50), 0, 0, 0, 5);
 
 		Light light = new Light(new Vector3f(0, 10000, -7000), new Vector3f(1, 1, 1));
         List<Light> lights = new ArrayList<Light>();
@@ -169,6 +182,7 @@ public class MainGameLoop {
 			renderer.processTerrain(terrain);
 			renderer.processTerrain(terrain2);
 			renderer.processEntity(entity);
+			renderer.processEntity(StreetLampO);
 			for(Entity ent:entities){
 				renderer.processEntity(ent);
 			}

@@ -5,6 +5,9 @@ My first java game, let's hope this ends well
 
 _______________________
 
+ Alpha 0.0.0.1.9
+* Fixed issue #2
+
  Alpha 0.0.0.1.8
 + Re-added support for multiple lights, correctly this time! (RAINBOW TEST LIGHTS!!)
 
