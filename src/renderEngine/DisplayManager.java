@@ -13,7 +13,7 @@ public class DisplayManager {
 	private static final int WIDTH = 1280;
 	private static final int HEIGHT = 720;
 	private static final int FPS_CAP = 120;
-	public static String Title = "Alpha 0.0.0.2.2";
+	public static String Title = "Alpha 0.0.0.2.4";
 	
 	private static long lastFrameTime;
 	private static float delta;

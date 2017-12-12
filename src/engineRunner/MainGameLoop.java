@@ -4,12 +4,18 @@ import java.util.List;
 import java.util.Random;
 
 import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL30;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
+import org.lwjgl.util.vector.Vector4f;
 
 import entities.Camera;
 import entities.Entity;
 import entities.Light;
 import entities.Player;
+import guis.GuiRenderer;
+import guis.GuiTexture;
 //hello
 import models.RawModel;
 import models.TexturedModel;
@@ -24,6 +30,10 @@ import textures.ModelTexture;
 import textures.TerrainTexture;
 import textures.TerrainTexturePack;
 import toolbox.MousePicker;
+import water.WaterFrameBuffers;
+import water.WaterRenderer;
+import water.WaterShader;
+import water.WaterTile;
 
 public class MainGameLoop {
 
@@ -122,11 +132,14 @@ public class MainGameLoop {
 
 		
 		Terrain terrain = new Terrain(0, -1, loader, texturePack, blendMap, "heightmap");
+		Terrain terrainMini = new Terrain(0, -1, loader, texturePack, new TerrainTexture(loader.loadTexture("floatingIslandBlendMap")), "floatingIslandHeightMap", 150, 5);
 		Terrain terrain2 = new Terrain(-1, -1, loader, texturePack, blendMap, "heightmap");
+		List<Terrain> terrains = new ArrayList<Terrain>();
+		terrains.add(terrainMini);
 		
 		//Lights
         List<Light> lights = new ArrayList<Light>();
-        lights.add(new Light(new Vector3f(0, 1000, -7000), new Vector3f(0.4f,0.4f,0.4f)));
+        lights.add(new Light(new Vector3f(3000, 2000, 2000), new Vector3f(1, 1, 1)));
         lights.add(new Light(new Vector3f(370, 16, -300), new Vector3f(0,2,2), new Vector3f(1, 0.01f, 0.002f)));
         lights.add(new Light(new Vector3f(293, 6, -305), new Vector3f(2,2,0), new Vector3f(1, 0.01f, 0.002f)));
         
@@ -136,12 +149,12 @@ public class MainGameLoop {
         entities.add(new Entity(StreetLamp, new Vector3f(293, terrain.getHeightOfTerrain(293, -305) - 0.5f, -305), 0, 0, 0, 5));
         
         //Movable Lamp
-        Entity MovableLamp = new Entity(StreetLamp, new Vector3f(185, terrain.getHeightOfTerrain(185, -293) - 0.5f, -293), 0, 0, 0, 5);
+        Entity MovableLamp = new Entity(StreetLamp, new Vector3f(50, terrainMini.getHeightOfTerrain(50, -60) - 0.5f, -60), 0, 0, 0, 5);
         Light MovableLampLight = new Light(new Vector3f(185, 9, -293), new Vector3f(2,0,0), new Vector3f(1, 0.01f, 0.002f));
         entities.add(MovableLamp);
         lights.add(MovableLampLight);
         Random random1 = new Random(676452);
-		for(int i = 0; i < 800; i++){
+		/*for(int i = 0; i < 800; i++){
 			if (i % 20 == 0) {
 				float x = random1.nextFloat() * 800;
                 float z = random1.nextFloat() * -600;
@@ -163,38 +176,71 @@ public class MainGameLoop {
 				entities.add(new Entity(altTreeModel, new Vector3f(x,y - 5,z), 0, random1.nextFloat() * 360, 0, 3f));
 			}
 
-		}
+		}*/
 		
 		MasterRenderer renderer = new MasterRenderer(loader);
 		
-		Player player = new Player(stanfordBunny, new Vector3f(100,0,-100), 0, 0, 0, 0.3f);
+		Player player = new Player(stanfordBunny, new Vector3f(50,0,-50), 0, 0, 0, 0.3f);
 		
 		Camera camera = new Camera(player);
 		
 		MousePicker picker = new MousePicker(camera, renderer.getProjectionMatrix(), terrain);
+		entities.add(player);
+		
+		//Gui Stuff
+		
+		GuiRenderer guiRenderer = new GuiRenderer(loader);
+		List<GuiTexture> guis = new ArrayList<GuiTexture>();
+		
+		//Water Stuff
+		
+		WaterShader waterShader = new WaterShader();
+		WaterRenderer waterRenderer = new WaterRenderer(loader, waterShader, renderer.getProjectionMatrix());
+		List<WaterTile> waters = new ArrayList<WaterTile>();
+		WaterTile water = new WaterTile(75,-75,-2.5f);
+		waters.add(water);
+		
+		WaterFrameBuffers fbos = new WaterFrameBuffers();
+		
+		//*Water Gui Example*
+		GuiTexture ReflectionGui = new GuiTexture(fbos.getReflectionTexture(), new Vector2f(-0.5f,0.5f), new Vector2f(0.25f,0.25f));
+		GuiTexture RefractionGui = new GuiTexture(fbos.getRefractionTexture(), new Vector2f(0.5f,0.5f), new Vector2f(0.25f,0.25f));
+		guis.add(ReflectionGui);
+		guis.add(RefractionGui);
+		
+		//*****************Game Loop*****************************
 		
 		while (!Display.isCloseRequested()) {
-			player.move(terrain);
+			player.move(terrainMini);
 			camera.move();
 			picker.update();
+			GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
 			
-			Vector3f terrainPoint = picker.getCurrentTerrainPoint();
-			if(terrainPoint!=null) {
-				MovableLamp.setPosition(terrainPoint);
-				MovableLampLight.setPosition(new Vector3f(MovableLamp.getPosition().x, MovableLamp.getPosition().y + 5, MovableLamp.getPosition().z));
-			}
+			//Water Reflection -Hungry
+			fbos.bindReflectionFrameBuffer();
+			float distance = 2 * (camera.getPosition().y - water.getHeight());
+			camera.getPosition().y -= distance;
+			camera.invertPitch();
+			renderer.renderScene(entities, terrains, lights, camera, new Vector4f(0, 1, 0, -water.getHeight()));
+			camera.getPosition().y += distance;
+			camera.invertPitch();
 			
-			renderer.processEntity(player);
-			renderer.processTerrain(terrain);
-			renderer.processTerrain(terrain2);
-			renderer.processEntity(entity);
-			for(Entity ent:entities){
-				renderer.processEntity(ent);
-			}
-			renderer.render(lights, camera);
+			//Water Refraction
+			fbos.bindRefractionFrameBuffer();
+			renderer.renderScene(entities, terrains, lights, camera, new Vector4f(0, -1, 0, water.getHeight()));
+			
+			//rScene rendering -Hungry
+			GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
+			fbos.unbindCurrentFrameBuffer();
+			renderer.renderScene(entities, terrains, lights, camera, new Vector4f(0, 1, 0, 100000));
+			waterRenderer.render(waters, camera);
+			guiRenderer.render(guis);
+			
 			DisplayManager.updateDisplay();
 		}
-
+		//*****************After Exit Code*****************
+		fbos.cleanUp();
+		waterShader.cleanUp();
 		renderer.cleanUp();
 		loader.cleanUp();
 		DisplayManager.closeDisplay();

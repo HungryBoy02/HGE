@@ -5,6 +5,10 @@ My first java game, let's hope this ends well
 
 _______________________
 
+ Alpha 0.0.0.2.4
++ Started work on water! (yay)
+* Changed the map for testing pourposes.
+
  Alpha 0.0.0.2.3
 + Added Mouse Picking support
 + You can move a lamp with your mouse!

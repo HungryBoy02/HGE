@@ -18,8 +18,8 @@ import toolbox.Maths;
 
 public class Terrain {
 
-	private static final float SIZE = 800;
-	private static final float MAX_HEIGHT = 40;
+	private static float SIZE = 800;
+	private static float MAX_HEIGHT = 40;
 	private static final float MAX_PIXEL_COLOR = 256 * 256 * 256;
 
 	private float x;
@@ -32,6 +32,27 @@ public class Terrain {
 
 	public Terrain(int gridX, int gridZ, Loader loader, TerrainTexturePack texturePack, TerrainTexture blendMap,
 			String heightMap) {
+		this.texturePack = texturePack;
+		this.blendMap = blendMap;
+		this.x = gridX * SIZE;
+		this.z = gridZ * SIZE;
+		this.model = generateTerrain(loader, heightMap);
+	}
+	
+	public Terrain(int gridX, int gridZ, Loader loader, TerrainTexturePack texturePack, TerrainTexture blendMap,
+			String heightMap, float size) {
+		this.SIZE = size;
+		this.texturePack = texturePack;
+		this.blendMap = blendMap;
+		this.x = gridX * SIZE;
+		this.z = gridZ * SIZE;
+		this.model = generateTerrain(loader, heightMap);
+	}
+	
+	public Terrain(int gridX, int gridZ, Loader loader, TerrainTexturePack texturePack, TerrainTexture blendMap,
+			String heightMap, float size, float maxHeight) {
+		this.SIZE = size;
+		this.MAX_HEIGHT = maxHeight;
 		this.texturePack = texturePack;
 		this.blendMap = blendMap;
 		this.x = gridX * SIZE;
