@@ -8,6 +8,10 @@ import entities.Camera;
  
 public class Maths {
      
+	public static float interpolate(float fromFloat, float toFloat, float progress) {
+		return fromFloat + progress * (toFloat - fromFloat);
+	}
+	
     public static Matrix4f createTransformationMatrix(Vector2f translation, Vector2f scale) {
         Matrix4f matrix = new Matrix4f();
         matrix.setIdentity();

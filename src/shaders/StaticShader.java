@@ -74,7 +74,7 @@ public class StaticShader extends ShaderProgram{
 	}
 	
 	public void loadSkyColor(float r, float g, float b){
-		super.loadVector(location_skyColor, new Vector3f(r,b,g));
+		super.loadVector(location_skyColor, new Vector3f(r,g,b));
 	}
 	
 	public void loadFakeLightingVarible(boolean useFake){

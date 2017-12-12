@@ -1,10 +1,4 @@
 package engineRunner;
-//hello
-import models.RawModel;
-import models.TexturedModel;
-import objConverter.ModelData;
-import objConverter.OBJFileLoader;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -12,20 +6,24 @@ import java.util.Random;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
-import renderEngine.DisplayManager;
-import renderEngine.Loader;
-import renderEngine.MasterRenderer;
-import renderEngine.OBJLoader;
-import renderEngine.EntityRenderer;
-import shaders.StaticShader;
-import terrains.Terrain;
-import textures.ModelTexture;
-import textures.TerrainTexture;
-import textures.TerrainTexturePack;
 import entities.Camera;
 import entities.Entity;
 import entities.Light;
 import entities.Player;
+//hello
+import models.RawModel;
+import models.TexturedModel;
+import objConverter.ModelData;
+import objConverter.OBJFileLoader;
+import renderEngine.DisplayManager;
+import renderEngine.Loader;
+import renderEngine.MasterRenderer;
+import renderEngine.OBJLoader;
+import terrains.Terrain;
+import textures.ModelTexture;
+import textures.TerrainTexture;
+import textures.TerrainTexturePack;
+import toolbox.MousePicker;
 
 public class MainGameLoop {
 
@@ -129,15 +127,19 @@ public class MainGameLoop {
 		//Lights
         List<Light> lights = new ArrayList<Light>();
         lights.add(new Light(new Vector3f(0, 1000, -7000), new Vector3f(0.4f,0.4f,0.4f)));
-        lights.add(new Light(new Vector3f(185, 9, -293), new Vector3f(2,0,0), new Vector3f(1, 0.01f, 0.002f)));
         lights.add(new Light(new Vector3f(370, 16, -300), new Vector3f(0,2,2), new Vector3f(1, 0.01f, 0.002f)));
         lights.add(new Light(new Vector3f(293, 6, -305), new Vector3f(2,2,0), new Vector3f(1, 0.01f, 0.002f)));
         
         //Lamps
         
-        entities.add(new Entity(StreetLamp, new Vector3f(185, terrain.getHeightOfTerrain(185, -293) - 0.5f, -293), 0, 0, 0, 5));
         entities.add(new Entity(StreetLamp, new Vector3f(370, terrain.getHeightOfTerrain(370, -300) - 0.5f, -300), 0, 0, 0, 5));
         entities.add(new Entity(StreetLamp, new Vector3f(293, terrain.getHeightOfTerrain(293, -305) - 0.5f, -305), 0, 0, 0, 5));
+        
+        //Movable Lamp
+        Entity MovableLamp = new Entity(StreetLamp, new Vector3f(185, terrain.getHeightOfTerrain(185, -293) - 0.5f, -293), 0, 0, 0, 5);
+        Light MovableLampLight = new Light(new Vector3f(185, 9, -293), new Vector3f(2,0,0), new Vector3f(1, 0.01f, 0.002f));
+        entities.add(MovableLamp);
+        lights.add(MovableLampLight);
         Random random1 = new Random(676452);
 		for(int i = 0; i < 800; i++){
 			if (i % 20 == 0) {
@@ -169,9 +171,19 @@ public class MainGameLoop {
 		
 		Camera camera = new Camera(player);
 		
+		MousePicker picker = new MousePicker(camera, renderer.getProjectionMatrix(), terrain);
+		
 		while (!Display.isCloseRequested()) {
 			player.move(terrain);
 			camera.move();
+			picker.update();
+			
+			Vector3f terrainPoint = picker.getCurrentTerrainPoint();
+			if(terrainPoint!=null) {
+				MovableLamp.setPosition(terrainPoint);
+				MovableLampLight.setPosition(new Vector3f(MovableLamp.getPosition().x, MovableLamp.getPosition().y + 5, MovableLamp.getPosition().z));
+			}
+			
 			renderer.processEntity(player);
 			renderer.processTerrain(terrain);
 			renderer.processTerrain(terrain2);
