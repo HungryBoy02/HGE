@@ -154,29 +154,29 @@ public class MainGameLoop {
         entities.add(MovableLamp);
         lights.add(MovableLampLight);
         Random random1 = new Random(676452);
-		/*for(int i = 0; i < 800; i++){
+		for(int i = 0; i < 10; i++){
 			if (i % 20 == 0) {
-				float x = random1.nextFloat() * 800;
-                float z = random1.nextFloat() * -600;
-				float y = terrain.getHeightOfTerrain(x, z);
+				float x = random1.nextFloat() * 150;
+                float z = random1.nextFloat() * -150;
+				float y = terrainMini.getHeightOfTerrain(x, z);
 				entities.add(new Entity(grassModel, new Vector3f(x,y,z), 0, 0, 0, 2));
 			}
 			if (i % 5 == 0) {
                 float x = random1.nextFloat() * 800;
                 float z = random1.nextFloat() * -600;
-				float y = terrain.getHeightOfTerrain(x, z);
+				float y = terrainMini.getHeightOfTerrain(x, z);
 				entities.add(new Entity(nTree, new Vector3f(x,y - 5,z), 0, random1.nextFloat() * 360, 0, 10f));
-				x = random1.nextFloat() * 800;
-                z = random1.nextFloat() * -600;
-				y = terrain.getHeightOfTerrain(x, z);
+				x = random1.nextFloat() * 150;
+                z = random1.nextFloat() * -150;
+				y = terrainMini.getHeightOfTerrain(x, z);
 				entities.add(new Entity(fernModel, random1.nextInt(4), new Vector3f(x,y,z), 0, random1.nextFloat() * 360, 0, 0.9f));
-				x = random1.nextFloat() * 800;
-                z = random1.nextFloat() * -600;
-				y = terrain.getHeightOfTerrain(x, z);
-				entities.add(new Entity(altTreeModel, new Vector3f(x,y - 5,z), 0, random1.nextFloat() * 360, 0, 3f));
+				x = random1.nextFloat() * 150;
+                z = random1.nextFloat() * -150;
+				y = terrainMini.getHeightOfTerrain(x, z);
+				entities.add(new Entity(nTree, new Vector3f(x,y - 5,z), 0, random1.nextFloat() * 360, 0, 10f));
 			}
 
-		}*/
+		}
 		
 		MasterRenderer renderer = new MasterRenderer(loader);
 		
@@ -194,19 +194,13 @@ public class MainGameLoop {
 		
 		//Water Stuff
 		
+		WaterFrameBuffers buffers = new WaterFrameBuffers();
+		
 		WaterShader waterShader = new WaterShader();
-		WaterRenderer waterRenderer = new WaterRenderer(loader, waterShader, renderer.getProjectionMatrix());
+		WaterRenderer waterRenderer = new WaterRenderer(loader, waterShader, renderer.getProjectionMatrix(), buffers);
 		List<WaterTile> waters = new ArrayList<WaterTile>();
 		WaterTile water = new WaterTile(75,-75,-2.5f);
 		waters.add(water);
-		
-		WaterFrameBuffers fbos = new WaterFrameBuffers();
-		
-		//*Water Gui Example*
-		GuiTexture ReflectionGui = new GuiTexture(fbos.getReflectionTexture(), new Vector2f(-0.5f,0.5f), new Vector2f(0.25f,0.25f));
-		GuiTexture RefractionGui = new GuiTexture(fbos.getRefractionTexture(), new Vector2f(0.5f,0.5f), new Vector2f(0.25f,0.25f));
-		guis.add(ReflectionGui);
-		guis.add(RefractionGui);
 		
 		//*****************Game Loop*****************************
 		
@@ -217,7 +211,7 @@ public class MainGameLoop {
 			GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
 			
 			//Water Reflection -Hungry
-			fbos.bindReflectionFrameBuffer();
+			buffers.bindReflectionFrameBuffer();
 			float distance = 2 * (camera.getPosition().y - water.getHeight());
 			camera.getPosition().y -= distance;
 			camera.invertPitch();
@@ -226,12 +220,12 @@ public class MainGameLoop {
 			camera.invertPitch();
 			
 			//Water Refraction
-			fbos.bindRefractionFrameBuffer();
+			buffers.bindRefractionFrameBuffer();
 			renderer.renderScene(entities, terrains, lights, camera, new Vector4f(0, -1, 0, water.getHeight()));
 			
 			//rScene rendering -Hungry
 			GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
-			fbos.unbindCurrentFrameBuffer();
+			buffers.unbindCurrentFrameBuffer();
 			renderer.renderScene(entities, terrains, lights, camera, new Vector4f(0, 1, 0, 100000));
 			waterRenderer.render(waters, camera);
 			guiRenderer.render(guis);
@@ -239,7 +233,7 @@ public class MainGameLoop {
 			DisplayManager.updateDisplay();
 		}
 		//*****************After Exit Code*****************
-		fbos.cleanUp();
+		buffers.cleanUp();
 		waterShader.cleanUp();
 		renderer.cleanUp();
 		loader.cleanUp();
