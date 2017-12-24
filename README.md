@@ -5,6 +5,9 @@ My first java game, let's hope this ends well
 
 _______________________
 
+ Alpha 0.0.0.2.6
++ Rippling water!!! :)
+
  Alpha 0.0.0.2.5
 + Added an early water :D
 
