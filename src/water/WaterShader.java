@@ -23,6 +23,9 @@ public class WaterShader extends ShaderProgram {
 	private int location_normalMap;
 	private int location_lightColor;
 	private int location_lightPosition;
+	private int location_depthMap;
+	private int location_nearPlane;
+	private int location_farPlane;
 
 	public WaterShader() {
 		super(VERTEX_FILE, FRAGMENT_FILE);
@@ -46,6 +49,9 @@ public class WaterShader extends ShaderProgram {
 		location_normalMap = getUniformLocation("normalMap");
 		location_lightColor = getUniformLocation("lightColor");
 		location_lightPosition = getUniformLocation("lightPosition");
+		location_depthMap = getUniformLocation("depthMap");
+		location_nearPlane = getUniformLocation("nearPlane");
+		location_farPlane = getUniformLocation("farPlane");
 	}
 	
 	public void connectTextureUnits() {
@@ -53,6 +59,12 @@ public class WaterShader extends ShaderProgram {
 		super.loadInt(location_refractionTexture, 1);
 		super.loadInt(location_dudvMap, 2);
 		super.loadInt(location_normalMap, 3);
+		super.loadInt(location_depthMap, 4);
+	}
+	
+	public void loadPlanes(float nearPlane, float farPlane) {
+		super.loadFloat(location_nearPlane, nearPlane);
+		super.loadFloat(location_farPlane, farPlane);
 	}
 	
 	public void loadLight(Light sun) {

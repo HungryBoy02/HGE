@@ -4,6 +4,9 @@ My first java game, let's hope this ends well
 (For all team members, when you leave a note, please leave a -YourUsernameHere at the end.)
 
 _______________________
+
+ Alpha 0.0.0.2.8
++ Finished water renderer
  
  Alpha 0.0.0.2.7
 + Reflective water :D
