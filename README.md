@@ -5,6 +5,9 @@ My first java game, let's hope this ends well
 
 _______________________
 
+ Alpha 0.0.0.2.9
++ Added normal map support *yay*
+
  Alpha 0.0.0.2.8
 + Finished water renderer
  
