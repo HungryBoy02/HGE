@@ -138,8 +138,9 @@ public class MainGameLoop {
 		terrains.add(terrainMini);
 		
 		//Lights
+		Light sun = new Light(new Vector3f(3000, 2000, 2000), new Vector3f(1, 1, 1));
         List<Light> lights = new ArrayList<Light>();
-        lights.add(new Light(new Vector3f(3000, 2000, 2000), new Vector3f(1, 1, 1)));
+        lights.add(sun);
         lights.add(new Light(new Vector3f(370, 16, -300), new Vector3f(0,2,2), new Vector3f(1, 0.01f, 0.002f)));
         lights.add(new Light(new Vector3f(293, 6, -305), new Vector3f(2,2,0), new Vector3f(1, 0.01f, 0.002f)));
         
@@ -227,7 +228,7 @@ public class MainGameLoop {
 			GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
 			buffers.unbindCurrentFrameBuffer();
 			renderer.renderScene(entities, terrains, lights, camera, new Vector4f(0, 1, 0, 100000));
-			waterRenderer.render(waters, camera);
+			waterRenderer.render(waters, camera, sun);
 			guiRenderer.render(guis);
 			
 			DisplayManager.updateDisplay();
