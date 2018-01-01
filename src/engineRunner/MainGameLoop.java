@@ -1,5 +1,6 @@
 package engineRunner;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -15,6 +16,9 @@ import entities.Camera;
 import entities.Entity;
 import entities.Light;
 import entities.Player;
+import fontMeshCreator.FontType;
+import fontMeshCreator.GUIText;
+import fontRendering.TextMaster;
 import guis.GuiRenderer;
 import guis.GuiTexture;
 //hello
@@ -43,6 +47,11 @@ public class MainGameLoop {
 
 		DisplayManager.createDisplay();
 		Loader loader = new Loader();
+		TextMaster.init(loader);
+		
+		FontType font = new FontType(loader.loadTexture("segoe"), new File("res/segoe.fnt"));
+        GUIText text = new GUIText("Rewound Galaxy?", 3f, font, new Vector2f(0f, 0f), 1f, true);
+        text.setColor(1, 0, 0);
 
 		// *********TERRAIN TEXTURE STUFF**********
 
@@ -139,11 +148,9 @@ public class MainGameLoop {
 		// **********************************************************]
 
 		Terrain terrain = new Terrain(0, -1, loader, texturePack, blendMap, "heightmap");
-		Terrain terrainMini = new Terrain(0, -1, loader, texturePack,
-				new TerrainTexture(loader.loadTexture("floatingIslandBlendMap")), "floatingIslandHeightMap", 150, 5);
 
 		List<Terrain> terrains = new ArrayList<Terrain>();
-		terrains.add(terrainMini);
+		terrains.add(terrain);
 
 		// Lights
 		Light sun = new Light(new Vector3f(3000, 2000, 2000), new Vector3f(1, 1, 1));
@@ -152,7 +159,7 @@ public class MainGameLoop {
 
 		// Lamp
 		Entity MovableLamp = new Entity(StreetLamp,
-				new Vector3f(50, terrainMini.getHeightOfTerrain(50, -60) - 0.5f, -60), 0, 0, 0, 5);
+				new Vector3f(50, terrain.getHeightOfTerrain(50, -60) - 0.5f, -60), 0, 0, 0, 5);
 		entities.add(MovableLamp);
 
 		// **********Random generation***********
@@ -161,22 +168,22 @@ public class MainGameLoop {
 			if (i % 20 == 0) {
 				float x = random1.nextFloat() * 150;
 				float z = random1.nextFloat() * -150;
-				float y = terrainMini.getHeightOfTerrain(x, z);
+				float y = terrain.getHeightOfTerrain(x, z);
 				entities.add(new Entity(grassModel, new Vector3f(x, y, z), 0, 0, 0, 2));
 			}
 			if (i % 5 == 0) {
 				float x = random1.nextFloat() * 800;
 				float z = random1.nextFloat() * -600;
-				float y = terrainMini.getHeightOfTerrain(x, z);
+				float y = terrain.getHeightOfTerrain(x, z);
 				entities.add(new Entity(nTree, new Vector3f(x, y - 5, z), 0, random1.nextFloat() * 360, 0, 10f));
 				x = random1.nextFloat() * 150;
 				z = random1.nextFloat() * -150;
-				y = terrainMini.getHeightOfTerrain(x, z);
+				y = terrain.getHeightOfTerrain(x, z);
 				entities.add(new Entity(fernModel, random1.nextInt(4), new Vector3f(x, y, z), 0,
 						random1.nextFloat() * 360, 0, 0.9f));
 				x = random1.nextFloat() * 150;
 				z = random1.nextFloat() * -150;
-				y = terrainMini.getHeightOfTerrain(x, z);
+				y = terrain.getHeightOfTerrain(x, z);
 				entities.add(new Entity(nTree, new Vector3f(x, y - 5, z), 0, random1.nextFloat() * 360, 0, 10f));
 			}
 
@@ -205,13 +212,13 @@ public class MainGameLoop {
 		WaterShader waterShader = new WaterShader();
 		WaterRenderer waterRenderer = new WaterRenderer(loader, waterShader, renderer.getProjectionMatrix(), buffers);
 		List<WaterTile> waters = new ArrayList<WaterTile>();
-		WaterTile water = new WaterTile(75, -75, -2.5f);
+		WaterTile water = new WaterTile(1 * 60, -1 * 60, -2.5f);
 		waters.add(water);
 
 		// *****************Game Loop*****************************
 
 		while (!Display.isCloseRequested()) {
-			player.move(terrainMini);
+			player.move(terrain);
 			camera.move();
 			picker.update();
 			GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
@@ -236,13 +243,17 @@ public class MainGameLoop {
 			buffers.unbindCurrentFrameBuffer();
 			renderer.renderScene(entities, normalMapEntities, terrains, lights, camera, new Vector4f(0, 1, 0, 100000));
 			waterRenderer.render(waters, camera, sun);
+			
 			guiRenderer.render(guis);
+			TextMaster.render();
 
 			DisplayManager.updateDisplay();
 		}
 		// *****************After Exit Code*****************
+		TextMaster.cleanUp();
 		buffers.cleanUp();
 		waterShader.cleanUp();
+		guiRenderer.cleanUp();
 		renderer.cleanUp();
 		loader.cleanUp();
 		DisplayManager.closeDisplay();
