@@ -5,6 +5,9 @@ My first java game, let's hope this ends well
 
 _______________________
 
+ Alpha 0.0.0.3.0
++ PARTICLES! YAY. I dare you to press F4!
+
  Alpha 0.0.0.2.9/5
 + Some text rendering stuff
 

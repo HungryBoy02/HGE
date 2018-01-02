@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
@@ -27,6 +28,10 @@ import models.TexturedModel;
 import normalMappingObjConverter.NormalMappedObjLoader;
 import objConverter.ModelData;
 import objConverter.OBJFileLoader;
+import particles.Particle;
+import particles.ParticleMaster;
+import particles.ParticleSystem;
+import particles.ParticleSystem;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.MasterRenderer;
@@ -48,10 +53,15 @@ public class MainGameLoop {
 		DisplayManager.createDisplay();
 		Loader loader = new Loader();
 		TextMaster.init(loader);
-		
+		MasterRenderer renderer = new MasterRenderer(loader);
+		ParticleMaster.init(loader, renderer.getProjectionMatrix());
+
 		FontType font = new FontType(loader.loadTexture("segoe"), new File("res/segoe.fnt"));
-        GUIText text = new GUIText("Rewound Galaxy?", 3f, font, new Vector2f(0f, 0f), 1f, true);
-        text.setColor(1, 0, 0);
+		GUIText text = new GUIText("Rewound Galaxy? Alpha Test 0.0.0.3.0 (Happy new years!)", 2f, font, new Vector2f(0f, 0f), 1f, true);
+		text.setColor(1, 0, 0);
+		text.setBorderWidth(0.4f);
+		text.setBorderEdge(0.4f);
+		text.setOutlineColor(new Vector3f(0.0f, 1.0f, 0.0f));
 
 		// *********TERRAIN TEXTURE STUFF**********
 
@@ -158,8 +168,8 @@ public class MainGameLoop {
 		lights.add(sun);
 
 		// Lamp
-		Entity MovableLamp = new Entity(StreetLamp,
-				new Vector3f(50, terrain.getHeightOfTerrain(50, -60) - 0.5f, -60), 0, 0, 0, 5);
+		Entity MovableLamp = new Entity(StreetLamp, new Vector3f(50, terrain.getHeightOfTerrain(50, -60) - 0.5f, -60),
+				0, 0, 0, 5);
 		entities.add(MovableLamp);
 
 		// **********Random generation***********
@@ -191,8 +201,6 @@ public class MainGameLoop {
 
 		// *************
 
-		MasterRenderer renderer = new MasterRenderer(loader);
-
 		Player player = new Player(stanfordBunny, new Vector3f(50, 0, -50), 0, 0, 0, 0.3f);
 
 		Camera camera = new Camera(player);
@@ -214,6 +222,15 @@ public class MainGameLoop {
 		List<WaterTile> waters = new ArrayList<WaterTile>();
 		WaterTile water = new WaterTile(1 * 60, -1 * 60, -2.5f);
 		waters.add(water);
+		
+		//*******************Initiate Particle System*************
+		
+		ParticleSystem system = new ParticleSystem(50, 25, 0.3f, 4, 1);
+		system.randomizeRotation();
+		system.setDirection(new Vector3f(0, 1, 0), 0.1f);
+		system.setLifeError(0.1f);
+		system.setSpeedError(0.4f);
+		system.setScaleError(0.2f);
 
 		// *****************Game Loop*****************************
 
@@ -221,6 +238,14 @@ public class MainGameLoop {
 			player.move(terrain);
 			camera.move();
 			picker.update();
+			ParticleMaster.update();
+
+			if (Keyboard.isKeyDown(Keyboard.KEY_F4)) {
+				system.generateParticles(new Vector3f(player.getPosition().x, player.getPosition().y + 5, player.getPosition().z));
+			}
+			
+			system.generateParticles(new Vector3f(75, 15, -75));
+
 			GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
 
 			// Water Reflection -Hungry
@@ -243,13 +268,17 @@ public class MainGameLoop {
 			buffers.unbindCurrentFrameBuffer();
 			renderer.renderScene(entities, normalMapEntities, terrains, lights, camera, new Vector4f(0, 1, 0, 100000));
 			waterRenderer.render(waters, camera, sun);
-			
+
+			ParticleMaster.renderParticles(camera);
+
 			guiRenderer.render(guis);
 			TextMaster.render();
 
 			DisplayManager.updateDisplay();
 		}
 		// *****************After Exit Code*****************
+
+		ParticleMaster.cleanUp();
 		TextMaster.cleanUp();
 		buffers.cleanUp();
 		waterShader.cleanUp();
