@@ -1,8 +1,8 @@
-# The Secret Weapon
-My first java game, let's hope this ends well
+# HGE (Hungry's game engine)
+My first java game engine, let's hope this ends well
 
 (For all team members, when you leave a note, please leave a -YourUsernameHere at the end.)
-
+(nvm i dont have a team)
 _______________________
 
  Alpha 0.0.0.3.0
