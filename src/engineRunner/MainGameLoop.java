@@ -57,7 +57,7 @@ public class MainGameLoop {
 		ParticleMaster.init(loader, renderer.getProjectionMatrix());
 
 		FontType font = new FontType(loader.loadTexture("segoe"), new File("res/segoe.fnt"));
-		GUIText text = new GUIText("Rewound Galaxy? Alpha Test 0.0.0.3.0 (Happy new years!)", 2f, font, new Vector2f(0f, 0f), 1f, true);
+		GUIText text = new GUIText("Hungry's Game Engine", 2f, font, new Vector2f(0f, 0f), 1f, true);
 		text.setColor(1, 0, 0);
 		text.setBorderWidth(0.4f);
 		text.setBorderEdge(0.4f);

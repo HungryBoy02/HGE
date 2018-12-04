@@ -13,7 +13,7 @@ public class DisplayManager {
 	private static final int WIDTH = 1280;
 	private static final int HEIGHT = 720;
 	private static final int FPS_CAP = 120;
-	public static String Title = "Rewound Galaxy: Alpha Test 0.0.0.3.0";
+	public static String Title = "Hungry's Game Engine Version: 0.0.0.3.0";
 	
 	private static long lastFrameTime;
 	private static float delta;
